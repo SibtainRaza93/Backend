@@ -1,0 +1,19 @@
+
+
+//
+Version of Version
+
+^5.2.1 
+
+1st:- 1
+2nd:- 2
+3rd:- 5
+
+1:- lst port :- minor fixes , optional update
+
+2:- 2:- Recommended Bug fix (security)
+
+3L- 5:- major Bug and release
+
+^:- compatible with Version
+~:- {5.2}  will not change :- minor fixes will change 
