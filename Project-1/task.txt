@@ -2,8 +2,14 @@ REST API- JSON
 
 GET /users - list all users :- DONE
 
-GET /users/1 = get the user with ID 1
-GET /users/2 = get the user with ID 2
+GET /users/1 = get the user with ID 1  :-DONE
+GET /users/2 = get the user with ID 2  :-DONE
+
+Dynamic Path Parameters
+
+GET /api/users/:id
+
+:id -> Variable | Dynamic
 
 POST /users/1 - Create the user
 
