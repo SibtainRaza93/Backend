@@ -3,17 +3,25 @@ const users = require("./MOCK_DATA.json");
 
 const app =express();
 
-const PORT = 8000
+const PORT = 3000
 
 //Routes
+//Global Routes
+// app.router()
 
+app.use(express.urlencoded({extended: false}));
+
+app.use((req, res, next) =>{
+    // Add new header
+    res.setHeader("myname", "raza")
+    console.log("Hello From Middleware")
+})
 app.get("/users", (req, res) =>{
     const http = `
     <ul>
     ${users.map((user) => `<li>${user.first_name}</li>`).join}
     </ul>
     `;
-
     res.send(http)
 })
 
