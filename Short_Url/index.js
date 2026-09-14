@@ -10,6 +10,7 @@ app.use(express.json())
 connectDB("mongodb://localhost:27017/short-url");
 app.use("/url", urlRoute);
 
+
 app.listen(PORT, () =>{
     console.log(`Server Started at PORT: ${PORT}`);
 })
