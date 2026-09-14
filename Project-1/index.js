@@ -13,7 +13,8 @@ app.use(express.urlencoded({extended: false}));
 
 app.use((req, res, next) =>{
     // Add new header
-    res.setHeader("myname", "raza")
+    res.setHeader("myname", "raza") // custom header
+    // Always use X before building custome header
     console.log("Hello From Middleware")
 })
 app.get("/users", (req, res) =>{
