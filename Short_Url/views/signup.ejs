@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign Up</title>
+</head>
+<body>
+  <h2>Sign Up</h2>
+
+  <form action="/user" method="POST">
+    <div>
+      <label for="name">Name</label><br />
+      <input type="text" id="name" name="name" required />
+    </div>
+
+    <div>
+      <label for="email">Email</label><br />
+      <input type="email" id="email" name="email" required />
+    </div>
+
+    <div>
+      <label for="password">Password</label><br />
+      <input type="password" id="password" name="password" required />
+    </div>
+
+    <div style="margin-top: 10px;">
+      <button type="submit">Sign Up</button>
+    </div>
+  </form>
+</body>
+</html>
