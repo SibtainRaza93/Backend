@@ -2,14 +2,14 @@ const express = require('express');
 
 const app = express();
 
-app.use("/about", (req, res) => {
-    res.send("I am about page");
-})
+// app.use("/about", (req, res) => {
+//     res.send("I am about page");
+// })
 
-app.get("/user", (req, res) => {
-    // console.log(req);
-    res.send({ name: "Raza", age: 20 });
-})
+// app.get("/user", (req, res) => {
+//     // console.log(req);
+//     res.send({ name: "Raza", age: 20 });
+// })
 
 //Book Store make 
 
@@ -25,12 +25,16 @@ app.get("/book", (req, res) => {
     res.send(products);
 })
 
+
+//GET 
 app.get("/book/:id", (req, res) => {
     const id = parseInt(req.params.id);
     const product = products.find(info => info.id == id);
     console.log(product);
 })
 
+
+//DELETE
 app.delete("/book/:id", (req, res) => {
     const id = parseInt(req.params.id);
     const index = products.findIndex(info => info.id == id);
@@ -45,6 +49,13 @@ app.delete("/book/:id", (req, res) => {
     res.send("Product deleted successfully");
 })
 
+
+//PATCH
+app.patch("/book", (req, res)=>{
+
+
+    res.send("Patch has been done");
+})
 app.listen(4000, () => {
     console.log("Listening at port:4000")
 })
