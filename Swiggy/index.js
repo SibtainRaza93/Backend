@@ -1,4 +1,5 @@
 const express = require('express');
+const {Auth} = require("./middleware/Auth")
 
 
 const app = express();
@@ -88,32 +89,27 @@ const productMenu = [
 ];
 
 //Routes
-
+// Handle the error like middle ware
+app.use("/admin", Auth)
 app.get("/food", (req, res) =>{
     res.send(productMenu);
 })
 
 app.post("/admin", (req, res)=>{
-    // ADD Items 
-    //Authentication karna padega 
-    const token = "ABCDEF";
-    const Access = token == "ABCDEF"?1:0;
-
-    if(Access){
-        productMenu.push(req.body);
-        res.send("Items Added successfuly");
-    }else{
-        res.send("Items not added");
-    }
+    // // ADD Items 
+    // //Authentication karna padega 
+    // const token = "ABCDEF";
+    // const Access = token == "ABCDEF"?1:0;
+    productMenu.push(req.body);
+    res.send("Items Added successfuly");
+   
 
 
 })
 
 app.delete("/admin/:id", (req, res) =>{
-    const token = "ABCDEF";
-    const Access = token == "ABCDEF"?1:0;
-
-    if(Access){
+    // const token = "ABCDEF";
+    // const Access = token == "ABCDEF"?1:0;
         const id = parseInt(req.params.id)
 
         const index = productMenu.findIndex(item => item.id ===id);
@@ -124,22 +120,14 @@ app.delete("/admin/:id", (req, res) =>{
             productMenu.splice(index, 1);
             res.send("Item has successfully deleted ")
         }
-    }
-    else{
-        res.status(403).send("No permission, register for delete the items");
-    }
 })
 
 app.patch("/admin/:id", (req, res) => {
-    const token = "ABCDEF";
-    const access = token === "ABCDEF" ? 1 : 0;
+    // const token = "ABCDEF";
+    // const access = token === "ABCDEF" ? 1 : 0;
     const id = parseInt(req.params.id);
 
     const foodata = productMenu.find(item => item.id === id);
-
-    if (!access) {
-        return res.status(403).send("Permission is required");
-    }
 
     if (!foodata) {
         return res.status(404).send("Food does not exist");
