@@ -129,6 +129,32 @@ app.delete("/admin/:id", (req, res) =>{
         res.status(403).send("No permission, register for delete the items");
     }
 })
+
+app.patch("/admin/:id", (req, res) => {
+    const token = "ABCDEF";
+    const access = token === "ABCDEF" ? 1 : 0;
+    const id = parseInt(req.params.id);
+
+    const foodata = productMenu.find(item => item.id === id);
+
+    if (!access) {
+        return res.status(403).send("Permission is required");
+    }
+
+    if (!foodata) {
+        return res.status(404).send("Food does not exist");
+    }
+
+    if (req.body.name) {
+        foodata.name = req.body.name;
+    }
+
+    if (req.body.price) {
+        foodata.price = req.body.price;
+    }
+
+    res.send(foodata);
+});
 app.listen(4000, ()=>{
     console.log("Listening at PORT: 4000");
 })
