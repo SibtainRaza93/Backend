@@ -88,6 +88,8 @@ const productMenu = [
   }
 ];
 
+
+const AddToCart = [];
 //Routes
 // Handle the error like middle ware
 app.use("/admin", Auth)
@@ -143,6 +145,44 @@ app.patch("/admin/:id", (req, res) => {
 
     res.send(foodata);
 });
+
+// Usert section start from here 
+
+app.post("/user/:id", (req, res) =>{
+  const id = parseInt(req.params.id);
+
+  const foodItems = productMenu.find(item => item.id == id);
+
+  if(foodItems){
+    AddToCart.push(foodItems);
+    res.status(200).send("Items added successfully")
+  }
+  else{
+    res.send("Items out of stack")
+  }
+})
+app.delete("/user/:id", (req, res) =>{
+  const id = parseInt(req.params.id);
+  const index = AddToCart.findIndex(item => item.id == id);
+
+  if(index == -1){
+    AddToCart.splice(index, 1);
+    res.send("Item removed successfully")
+  }
+  else{
+    res.send("Item is not present in cart")
+  }
+})
+
+app.get("/user", (req, res) =>{
+  if(AddToCart){
+    res.send(AddToCart);
+  }
+  else{
+    res.send("Cart is not present")
+  }
+
+})
 app.listen(4000, ()=>{
     console.log("Listening at PORT: 4000");
 })
