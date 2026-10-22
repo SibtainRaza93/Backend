@@ -16,7 +16,7 @@ app.post("/register", async (req, res) => {
   res.send("user Registered");
 });
 
-app.get("/info", async (req, res) => {
+app.get("/user", async (req, res) => {
   try {
     const users = await User.find({});
     res.send(users);
@@ -27,7 +27,7 @@ app.get("/info", async (req, res) => {
 
 app.get("/user/:id", async(req, res)=>{
     try {
-      const result = await user.findById(req.params.id);
+      const result = await User.findById(req.params.id);
 
       res.send(result);
     } catch (error) {
@@ -35,6 +35,19 @@ app.get("/user/:id", async(req, res)=>{
     }
 })
 
+
+app.delete("/user/:id", async(req, res)=>{
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.send("User deleted successfully");
+  } catch (error) {
+    res.send("Error", error.message)
+  }
+})
+
+app.patch("/user/id", (req, res)=>{
+   
+})
 connectDB()
   .then(() => {
     app.listen(PORT, () => {
