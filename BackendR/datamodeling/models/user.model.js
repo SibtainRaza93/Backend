@@ -5,20 +5,27 @@ const {Schema} = require('mongoose')
 const userSchema = new Schema({
 
     firstName : {
-        type: String
+        type: String,
+        required: true
     },
     lastName: {
         type: String,
     },
     gender: {
-        type: String
+        type: String,
+        enum: ["male", "female", "other"]
     },
     emailId : {
         type: String,
+        required: true,
         unique: true,
+        lowercase: true,
+        trim: true
     },
     password: {
-        type: String
+        type: String,
+        required: true,
+        unique: true,
     },
     photoId: {
         type: String
