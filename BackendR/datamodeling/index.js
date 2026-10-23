@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
 const User = require("./models/user.model")
+const validateUser = require("./utils/userValidation")
 
 const dns = require("node:dns");
 const app = express();
@@ -12,8 +13,15 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 app.use(express.json());
 
 app.post("/register", async (req, res) => {
-  await User.create(req.body);
-  res.send("user Registered");
+
+  try {
+    validateUser(req.body);
+    await User.create(req.body);
+    res.send("user Registered");
+  } catch (error) {
+    console.log("Error",error.message )
+  }
+
 });
 
 app.get("/user", async (req, res) => {
@@ -25,18 +33,18 @@ app.get("/user", async (req, res) => {
   }
 });
 
-app.get("/user/:id", async(req, res)=>{
-    try {
-      const result = await User.findById(req.params.id);
+app.get("/user/:id", async (req, res) => {
+  try {
+    const result = await User.findById(req.params.id);
 
-      res.send(result);
-    } catch (error) {
-      console.log("Error", error.message)
-    }
+    res.send(result);
+  } catch (error) {
+    console.log("Error", error.message)
+  }
 })
 
 
-app.delete("/user/:id", async(req, res)=>{
+app.delete("/user/:id", async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
     res.send("User deleted successfully");
@@ -45,8 +53,8 @@ app.delete("/user/:id", async(req, res)=>{
   }
 })
 
-app.patch("/user/id", (req, res)=>{
-   
+app.patch("/user/id", (req, res) => {
+
 })
 connectDB()
   .then(() => {
