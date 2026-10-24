@@ -3,6 +3,7 @@ const express = require('express');
 const connectDB = require('./config/db');
 const User = require("./models/user.model")
 const validateUser = require("./utils/userValidation")
+const bcrypt = require('bcrypt');
 
 const dns = require("node:dns");
 const app = express();
@@ -16,6 +17,8 @@ app.post("/register", async (req, res) => {
 
   try {
     validateUser(req.body);
+    // password convert into hash
+    req.body.password = await bcrypt.hash(req.body.password, 10);
     await User.create(req.body);
     res.send("user Registered");
   } catch (error) {
