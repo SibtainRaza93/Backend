@@ -18,7 +18,7 @@ app.post("/register", async (req, res) => {
   try {
     validateUser(req.body);
     // password convert into hash
-    req.body.password = await bcrypt.hash(req.body.password, 10);
+    req.body.password = await bcrypt.hash(req.body.password, 10); 
     await User.create(req.body);
     res.send("user Registered");
   } catch (error) {
@@ -27,6 +27,25 @@ app.post("/register", async (req, res) => {
 
 });
 
+app.post("/login", async(req, res) =>{
+  try{
+    const people = User.findById(req.body._id);
+
+    if(!(req.body.emailId == people.emailId)){
+        throw Error("Invalide credentials")
+    }
+    const isAllowed = await bcrypt.compare(req.bosy.password, people.password);
+
+    if(!isAllowed){
+      throw Error("Invalide credentials")
+    }
+
+    res.send("Login Successfully")
+  }
+  catch(error){
+    console.log("Error", error.message);
+  }
+})
 app.get("/user", async (req, res) => {
   try {
     const users = await User.find({});
