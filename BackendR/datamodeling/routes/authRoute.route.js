@@ -1,54 +1,73 @@
 const express = require('express');
-const User = require("./models/user.model")
-const validateUser = require("./utils/userValidation")
+const User = require('../models/user.model');
+const validateUser = require('../utils/userValidation');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const authRouter = express.Router();
 
-authRouter.post("/register", async (req, res) => {
-
+// POST /auth/register
+authRouter.post('/register', async (req, res) => {
   try {
     validateUser(req.body);
-    // password convert into hash
-    req.body.password = await bcrypt.hash(req.body.password, 10); 
-    await User.create(req.body);
-    res.send("user Registered");
-  } catch (error) {
-    console.log("Error",error.message )
-  }
 
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    await User.create({
+      ...req.body,
+      password: hashedPassword,
+    });
+
+    res.status(201).send('User registered successfully');
+  } catch (error) {
+    console.error('Register error:', error.message);
+    res.status(400).send(error.message);
+  }
 });
 
-authRouter.post("/login", async (req, res) => {
+// POST /auth/login
+authRouter.post('/login', async (req, res) => {
   try {
-    const people = await User.findOne({ emailId: req.body.emailId });
+    const { emailId, password } = req.body;
 
-    if (!people) {
-      throw new Error("Invalid credentials");
+    const user = await User.findOne({ emailId });
+
+    if (!user) {
+      return res.status(401).send('Invalid credentials');
     }
 
-    const isAllowed = await bcrypt.compare(
-      req.body.password,
-      people.password
-    );
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isAllowed) {
-      throw new Error("Invalid credentials");
+    if (!isPasswordValid) {
+      return res.status(401).send('Invalid credentials');
     }
 
     const token = jwt.sign(
-      { _id: people._id, emailId: people.emailId },
-      "sdbjhsdjh"
+      {
+        _id: user._id,
+        emailId: user.emailId,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
     );
 
-    res.cookie("token", token);
+    res.cookie('token', token);
 
-    res.send("Login Successfully");
+    res.send('Login successful');
   } catch (error) {
-    console.log("Error", error.message);
-    res.status(401).send(error.message);
+    console.error('Login error:', error.message);
+    res.status(500).send(error.message);
   }
 });
+
+authRouter.post("/logout", (req,res)=>{
+    try{
+      res.cookie("token", null,{expires: new Date.now()});
+      res.send("logout successfully!");
+    }
+    catch(error){
+      res.send("Error", error.message)
+    }
+})
 
 module.exports = authRouter;

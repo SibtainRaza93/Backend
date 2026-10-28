@@ -2,16 +2,19 @@ const express = require('express');
 
 const commentRouter = express.Router();
 
+// GET /comment
+commentRouter.get('/', (req, res) => {
+  res.send('Get user comments');
+});
 
-commentRouter.get("/", (req, res)=>{
-    res.send("get usesrs comments");
-})
-commentRouter.patch("/", (req, res)=>{
-    res.send("update usesrs comments");
-})
-commentRouter.delete("/", (req, res)=>{
-    res.send("delete usesrs comments");
-})
+// PATCH /comment
+commentRouter.patch('/', (req, res) => {
+  res.send('Update user comment');
+});
 
+// DELETE /comment
+commentRouter.delete('/', (req, res) => {
+  res.send('Delete user comment');
+});
 
 module.exports = commentRouter;
